@@ -5,7 +5,6 @@ import {
     IconButton,
     InputAdornment,
     makeStyles,
-    Paper,
     TextField,
     Theme,
     Typography,
@@ -37,14 +36,11 @@ interface WalletProps {
 //#region transfer tab
 const useTransferTabStyles = makeStyles((theme) =>
     createStyles({
-        line: {
-            height: 60,
+        root: {
             padding: theme.spacing(1),
         },
-
-        box: {
+        button: {
             marginTop: theme.spacing(2),
-            marginBottom: theme.spacing(2),
         },
     }),
 )
@@ -78,62 +74,46 @@ function TransferTab(props: TransferTabProps) {
     const onSend = useCallback(() => {
         props.onClose()
     }, [props])
+
     return (
-        <Paper elevation={0}>
-            <Box className={classes.box}>
-                <TextField
-                    required
-                    label={t('wallet_transfer_amount')}
-                    placeholder="0.0"
-                    value={amount}
-                    onChange={(ev: ChangeEvent<HTMLInputElement>) => onChangeAmount(ev)}
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <Typography variant="body2" color="textSecondary">
-                                    {token.symbol}
-                                </Typography>
-                            </InputAdornment>
-                        ),
-                    }}
-                    inputProps={{
-                        shrink: true,
-                    }}
-                    helperText={t('wallet_transfer_balance', {
-                        balance: formatBalance(new BigNumber(tokenBalance ?? '0'), token.decimals ?? 0),
-                        symbol: token.symbol,
-                    })}
-                />
-            </Box>
-
-            <Box className={classes.box}>
-                <Typography align="center" variant="body2" color="textSecondary"></Typography>
-            </Box>
-
-            <Box className={classes.box}>
-                <TextField
-                    required
-                    label={t('wallet_transfer_to_address')}
-                    placeholder={t('wallet_transfer_to_address')}
-                    value={address}
-                    onChange={(ev) => setAddress(ev.target.value)}
-                />
-            </Box>
-
-            <Box className={classes.box}>
-                <TextField
-                    placeholder={t('wallet_transfer_memo')}
-                    label={t('wallet_transfer_memo')}
-                    value={memo}
-                    onChange={(ev) => setMemo(ev.target.value)}
-                />
-            </Box>
-            <Box className={classes.box}>
-                <Button variant="contained" color="primary" onClick={onSend}>
-                    {t('wallet_transfer_send')}
-                </Button>
-            </Box>
-        </Paper>
+        <div className={classes.root}>
+            <TextField
+                required
+                label={t('wallet_transfer_amount')}
+                placeholder="0.0"
+                value={amount}
+                onChange={(ev: ChangeEvent<HTMLInputElement>) => onChangeAmount(ev)}
+                InputProps={{
+                    startAdornment: (
+                        <InputAdornment position="start">
+                            <Typography variant="body2" color="textSecondary">
+                                {token.symbol}
+                            </Typography>
+                        </InputAdornment>
+                    ),
+                }}
+                helperText={t('wallet_transfer_balance', {
+                    balance: formatBalance(new BigNumber(tokenBalance ?? '0'), token.decimals ?? 0),
+                    symbol: token.symbol,
+                })}
+            />
+            <TextField
+                required
+                label={t('wallet_transfer_to_address')}
+                placeholder={t('wallet_transfer_to_address')}
+                value={address}
+                onChange={(ev) => setAddress(ev.target.value)}
+            />
+            <TextField
+                placeholder={t('wallet_transfer_memo')}
+                label={t('wallet_transfer_memo')}
+                value={memo}
+                onChange={(ev) => setMemo(ev.target.value)}
+            />
+            <Button className={classes.button} variant="contained" color="primary" onClick={onSend}>
+                {t('wallet_transfer_send')}
+            </Button>
+        </div>
     )
 }
 //#endregion
@@ -142,7 +122,7 @@ function TransferTab(props: TransferTabProps) {
 const useReceiveTab = makeStyles((theme: Theme) =>
     createStyles({
         qr: {
-            marginTop: theme.spacing(3),
+            marginTop: theme.spacing(2),
         },
         form: {
             padding: theme.spacing(1),
